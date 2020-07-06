@@ -4,20 +4,35 @@
 
 class Solution(object):
 
-    def change_v(self, matrix, ai, aj, bi, bj):
-        t = matrix[ai][aj]
-        matrix[ai][aj] = matrix[bi][bj]
-        matrix[bi][bj] = t
+    def transport1(self, matrix):
+        # 转置
+        for i in range(len(matrix)):
+            for j in range(i, len(matrix)):
+                if i == j:
+                    continue
+                t = matrix[i][j]
+                matrix[i][j] = matrix[j][i]
+                matrix[j][i] = t
+        return matrix
+
+    def transport2(self, matrix):
+        # 转置
+        m_len = len(matrix)
+        for i in range(len(matrix)):
+            for j in range(len(matrix)/2):
+                # print j
+                t = matrix[i][j]
+                matrix[i][j] = matrix[i][m_len-j-1]
+                matrix[i][m_len-j-1] = t
+        return matrix
 
     def rotate(self, matrix):
         """
         :type matrix: List[List[int]]
         :rtype: None Do not return anything, modify matrix in-place instead.
         """
-        for i in range(len(matrix)/2+1):
-            for j in range(len(matrix)/2+1):
-                self.change_v(matrix, i, j, i, len(matrix) - j - 1)
-                self.change_v(matrix, i, len(matrix) - j - 1, len(matrix) - i - 1, len(matrix) - j - 1)
+        matrix = self.transport1(matrix)
+        matrix = self.transport2(matrix)
         return matrix
 
 
